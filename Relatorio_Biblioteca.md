@@ -13,7 +13,7 @@ O desafio consistia em projetar um webservice para integração entre as camadas
 A arquitetura de software dividida em camadas lógicas e físicas tem como principal objetivo a **separação de responsabilidades**. No nosso projeto, utilizamos uma arquitetura de Três Camadas (3-Tier), fisicamente distribuída em duas Máquinas Virtuais (VMs) hospedadas no VirtualBox e uma máquina local (host):
 
 1.  **Camada de Apresentação (Cliente / Frontend - Máquina Local):** Responsável pela interação direta com o usuário. Desenvolvida em HTML, CSS e JavaScript puro para máxima performance. Ela não possui regra de negócios ou conexão direta com banco de dados; sua única função é exibir dados e enviar ações do usuário (via requisições HTTP) para o servidor central. Roda diretamente no sistema operacional do usuário, sem a necessidade de uma terceira VM.
-2.  **Camada de Lógica de Negócios (Web Service / Backend - VM 2):** O "cérebro" da aplicação. Desenvolvida utilizando Node.js com o framework Express. Ela recebe as requisições REST (GET, POST, PUT, DELETE) do cliente, aplica as validações necessárias e interage com a camada de dados. 
+2.  **Camada de Lógica de Negócios (Web Service / Backend - VM 2):** O "cérebro" da aplicação. Desenvolvida em Python com o framework FastAPI. Ela recebe as requisições REST (GET, POST, PUT, DELETE) do cliente, aplica as validações necessárias e interage com a camada de dados. 
 3.  **Camada de Dados (SGBD - VM 1):** Responsável por armazenar, consultar e garantir a integridade das informações da biblioteca. Utilizamos o PostgreSQL. Esta máquina está isolada, bloqueando acessos externos diretos, permitindo comunicação apenas via Backend.
 
 ### 1.2 Resolução da Infraestrutura

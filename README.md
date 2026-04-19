@@ -83,11 +83,11 @@ PRONTO! O Banco de Dados está rodando e aceitando conexões.
 
 Nesta VM ficará nossa API que conectará ao banco e enviará os dados para o Frontend.
 
-### 1. Instalação do Node.js
-No terminal do Ubuntu (VM 2), atualize os pacotes e instale o Node.js:
+### 1. Instalação do Python
+No terminal do Ubuntu (VM 2), atualize os pacotes e instale o Python 3 e o pip:
 ```bash
 sudo apt update
-sudo apt install nodejs npm -y
+sudo apt install python3 python3-pip python3-venv -y
 ```
 
 ### 2. Preparando os Arquivos
@@ -97,42 +97,44 @@ mkdir biblioteca-api
 cd biblioteca-api
 ```
 
-2. Crie os arquivos `package.json` e `server.js` exatamente como estão disponibilizados para você na pasta `vm_backend`.
-Você pode usar o comando `nano server.js` e colar o código lá dentro.
+2. Crie os arquivos `requirements.txt` e `main.py` exatamente como estão disponibilizados para você na pasta `vm_backend`.
+Você pode usar o comando `nano main.py` e colar o código lá dentro.
 
 ### 3. Instalando as Dependências
-Com os arquivos criados dentro da pasta `biblioteca-api`, rode o comando:
+Com os arquivos criados dentro da pasta `biblioteca-api`, crie um ambiente virtual e instale os pacotes:
 ```bash
-npm install
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 ```
-Isso instalará os pacotes: express, cors, pg (postgres) e os pacotes do swagger (documentação).
+Isso instalará os pacotes: fastapi, uvicorn, psycopg2-binary e pydantic.
 
 ### 4. Configurando a Conexão com a VM 1 (BANCO)
-Abra o arquivo `server.js` (`nano server.js`) e procure pela configuração do Pool do Postgres (lá em cima). 
+Abra o arquivo `main.py` (`nano main.py`) e procure pela configuração do Banco de Dados (lá em cima). 
 Você deve **MUDAR O IP DO HOST** para colocar o **IP da sua VM 1**.
 Exemplo:
-```javascript
-const pool = new Pool({
-  user: 'admin_biblio',
-  host: 'COLOQUE_AQUI_O_IP_DA_VM1_BANCO', // <--- ALTERAR ISSO AQUI
-  database: 'biblioteca',
-  password: 'senha123',
-  port: 5432,
-});
+```python
+DB_CONFIG = {
+    "user": "admin_biblio",
+    "host": "COLOQUE_AQUI_O_IP_DA_VM1_BANCO", # <--- ALTERAR ISSO AQUI
+    "password": "senha123",
+    "database": "biblioteca",
+    "port": 5432
+}
 ```
 *Salve o arquivo e saia (Ctrl+O, Enter, Ctrl+X)*
 
 ### 5. Rodando o Servidor
-Execute o servidor:
+Execute o servidor usando o uvicorn:
 ```bash
-node server.js
+uvicorn main:app --host 0.0.0.0 --port 3000
 ```
-Se tudo der certo, aparecerá a mensagem: `Servidor rodando na porta 3000` e `Conectado ao banco de dados PostgreSQL!`.
+Se tudo der certo, aparecerá a mensagem que a aplicação está rodando.
 
 **Seu Web Service está pronto!**
-Dica: você pode ver a documentação das rotas (Swagger) acessando no navegador de qualquer pc na rede: `http://IP_DESTA_VM2:3000/api-docs`.
+Dica: O FastAPI gera a documentação automaticamente. Você pode ver as rotas (Swagger) acessando no navegador de qualquer pc na rede: `http://IP_DESTA_VM2:3000/docs`.
 
-**Anote o IP desta VM 2 e vá para a VM 3 (Frontend)!**
+**Anote o IP desta VM 2 e vá para o Frontend!**
 
 ---
 
