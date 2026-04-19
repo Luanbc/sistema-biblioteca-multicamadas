@@ -1,8 +1,8 @@
 # Sistema Integrado de Gestão de Biblioteca (Multicamadas)
 
-Este repositório contém o código-fonte e as instruções de configuração para o sistema de biblioteca, dividido em três camadas (Máquinas Virtuais).
+Este repositório contém o código-fonte e as instruções de configuração para o sistema de biblioteca, dividido em três camadas (2 Máquinas Virtuais e 1 Máquina Local).
 
-Abaixo estão as instruções de instalação para cada uma das máquinas. Certifique-se de configurar a rede das VMs em modo Bridge e anotar os IPs de cada uma.
+Abaixo estão as instruções de instalação para cada uma das partes. Certifique-se de configurar a rede das VMs em modo Bridge e anotar os IPs de cada uma.
 
 ---
 
@@ -138,28 +138,14 @@ Dica: O FastAPI gera a documentação automaticamente. Você pode ver as rotas (
 
 ---
 
-## 💻 VM 3 - Cliente (Frontend)
+## 💻 Cliente (Frontend - Rodando Localmente)
 
-Esta é a interface que o usuário final utilizará. Ela vai se conectar na nossa VM do Backend.
+Esta é a interface que o usuário final utilizará. Ela vai se conectar na nossa VM do Backend. Não é necessário rodar em uma VM separada, pode executar direto na sua máquina física!
 
-### 1. Instalação
-O Frontend foi feito em HTML, CSS e JavaScript puro para ser muito rápido.
-No Ubuntu Desktop (VM 3), você só precisa de um servidor HTTP simples.
-Abra o terminal e instale o python (caso não tenha):
-```bash
-sudo apt update
-sudo apt install python3 -y
-```
+### 1. Preparando os Arquivos
+Você já tem a pasta do projeto (com o arquivo `index.html`) no seu computador. Não precisa instalar o Node.js ou bibliotecas pesadas nela, pois é puramente HTML, CSS e JS.
 
-### 2. Preparando os Arquivos
-1. Crie uma pasta para o projeto e entre nela:
-```bash
-mkdir biblioteca-app
-cd biblioteca-app
-```
-2. Crie ou copie os 3 arquivos que estão na pasta `vm_frontend` para cá: `index.html`, `style.css` e `app.js`.
-
-### 3. Configurando a Conexão com o Backend (IMPORTANTE!)
+### 2. Configurando a Conexão com o Backend (IMPORTANTE!)
 O frontend precisa saber onde o Backend está rodando.
 Abra o arquivo `app.js` e altere a PRIMEIRA LINHA do código:
 ```javascript
@@ -167,13 +153,17 @@ const API_URL = 'http://IP_DA_VM2_BACKEND:3000/livros';
 ```
 *Substitua `IP_DA_VM2_BACKEND` pelo IP que você anotou da sua VM 2.*
 
-### 4. Rodando o Site
-Ainda dentro da pasta `biblioteca-app`, rode o comando para criar um servidor local:
+### 3. Rodando o Site
+Para abrir o site na sua máquina, você tem duas opções simples:
+
+**Opção A (Mais fácil):**
+Abra a pasta do Frontend e dê dois cliques no arquivo `index.html`. O site abrirá no seu navegador (alguns navegadores podem bloquear conexões por CORS dependendo das configurações locais).
+
+**Opção B (Servidor Local Seguro):**
+Se você tiver o Python instalado na sua máquina (Windows/Mac/Linux), abra o terminal na pasta do Frontend e rode:
 ```bash
-python3 -m http.server 8000
+python -m http.server 8000
 ```
-Isso vai rodar o seu site!
-Abra o navegador (Firefox ou Chrome) dentro dessa sua VM 3 e acesse:
-`http://localhost:8000`
+E acesse `http://localhost:8000` no seu navegador. Ou utilize a extensão **Live Server** do VS Code.
 
 Se a conexão estiver correta, você verá o site bonito e os livros que inserimos no banco de dados da VM 1! Você poderá adicionar, deletar e editar.
