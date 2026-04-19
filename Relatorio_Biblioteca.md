@@ -1,7 +1,7 @@
 # Relatório: Estudo de Caso - Web Service de Biblioteca
 
 **Projeto:** Sistema Integrado de Gestão de Biblioteca (Multicamadas)
-**Disciplina:** Arquitetura de Sistemas / Redes
+**Disciplina:** Gestão de Conhecimento e Arquitetura Orientada a Serviços.
 
 ---
 
@@ -10,15 +10,15 @@
 O desafio consistia em projetar um webservice para integração entre as camadas de uma aplicação de biblioteca, utilizando uma arquitetura multicamada com instâncias separadas (Máquinas Virtuais).
 
 ### 1.1 A Arquitetura Multicamadas (Multi-tier Architecture)
-A arquitetura de software dividida em camadas lógicas e físicas tem como principal objetivo a **separação de responsabilidades**. No nosso projeto, utilizamos uma arquitetura de Três Camadas (3-Tier), fisicamente distribuída em três Máquinas Virtuais (VMs) hospedadas no VirtualBox:
+A arquitetura de software dividida em camadas lógicas e físicas tem como principal objetivo a **separação de responsabilidades**. No nosso projeto, utilizamos uma arquitetura de Três Camadas (3-Tier), fisicamente distribuída em duas Máquinas Virtuais (VMs) hospedadas no VirtualBox e uma máquina local (host):
 
-1.  **Camada de Apresentação (Cliente / Frontend - VM 3):** Responsável pela interação direta com o usuário. Desenvolvida em HTML, CSS e JavaScript puro para máxima performance. Ela não possui regra de negócios ou conexão direta com banco de dados; sua única função é exibir dados e enviar ações do usuário (via requisições HTTP) para o servidor central.
+1.  **Camada de Apresentação (Cliente / Frontend - Máquina Local):** Responsável pela interação direta com o usuário. Desenvolvida em HTML, CSS e JavaScript puro para máxima performance. Ela não possui regra de negócios ou conexão direta com banco de dados; sua única função é exibir dados e enviar ações do usuário (via requisições HTTP) para o servidor central. Roda diretamente no sistema operacional do usuário, sem a necessidade de uma terceira VM.
 2.  **Camada de Lógica de Negócios (Web Service / Backend - VM 2):** O "cérebro" da aplicação. Desenvolvida utilizando Node.js com o framework Express. Ela recebe as requisições REST (GET, POST, PUT, DELETE) do cliente, aplica as validações necessárias e interage com a camada de dados. 
 3.  **Camada de Dados (SGBD - VM 1):** Responsável por armazenar, consultar e garantir a integridade das informações da biblioteca. Utilizamos o PostgreSQL. Esta máquina está isolada, bloqueando acessos externos diretos, permitindo comunicação apenas via Backend.
 
 ### 1.2 Resolução da Infraestrutura
-Para que as VMs se comunicassem, a interface de rede do VirtualBox foi configurada no modo **Bridge** (Ponte). Isso permitiu que o roteador local atribuísse um IP válido na rede local para cada máquina. 
-Dessa forma, o Frontend foi configurado para fazer requisições para o IP do Backend, e o Backend foi configurado para autenticar no IP do SGBD. Essa topologia simula perfeitamente um ambiente em nuvem real (como instâncias EC2 da AWS ou droplets da DigitalOcean).
+Para que as VMs se comunicassem entre si e com a máquina local, a interface de rede do VirtualBox foi configurada no modo **Bridge** (Ponte). Isso permitiu que o roteador local atribuísse um IP válido na rede local para cada máquina virtual. 
+Dessa forma, o Frontend (rodando na máquina local) foi configurado para fazer requisições para o IP da VM do Backend, e o Backend foi configurado para autenticar no IP da VM do SGBD. Essa topologia simula perfeitamente um ambiente em nuvem real (como instâncias EC2 da AWS ou droplets da DigitalOcean).
 
 ---
 
